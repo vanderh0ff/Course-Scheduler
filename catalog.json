@@ -15,5 +15,19 @@
     },
     "availability": ["Spring"],
     "requiresLab": "CS102L"
+  },
+  {
+    "code": "CS102L",
+    "credits": 1,
+    "prereqs": { "tag": "None" },
+    "availability": ["Spring"],
+    "requiresLab": null
+  },
+  {
+    "code": "MATH101",
+    "credits": 3,
+    "prereqs": { "tag": "None" },
+    "availability": ["Fall"],
+    "requiresLab": null
   }
 ]

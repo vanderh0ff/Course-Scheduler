@@ -38,6 +38,4 @@ jobs:
 
     - name: Run Tests
       run: |
-        # Since we have a main function that prints output, 
-        # we can verify it runs without crashing
-        ./planner
+        cabal run planner -- catalog.json
