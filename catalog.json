@@ -1,0 +1,19 @@
+[
+  {
+    "code": "CS101",
+    "credits": 4,
+    "prereqs": { "tag": "None" },
+    "availability": ["Fall", "Spring"],
+    "requiresLab": null
+  },
+  {
+    "code": "CS102",
+    "credits": 4,
+    "prereqs": {
+      "tag": "CourseCode",
+      "contents": "CS101"
+    },
+    "availability": ["Spring"],
+    "requiresLab": "CS102L"
+  }
+]

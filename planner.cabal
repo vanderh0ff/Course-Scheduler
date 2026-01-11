@@ -1,0 +1,32 @@
+cabal-version:      3.0
+name:               course-planner
+version:            0.1.0.0
+synopsis:           A constraint-based college course scheduler.
+license:            MIT
+author:             Matthew Vander Hoff
+category:           Education
+build-type:         Simple
+
+executable planner
+    main-is:          Main.hs
+    
+    -- This tells Cabal where to look for your source files
+    hs-source-dirs:   app/src
+    
+    -- Dependencies required for the project
+    build-depends:    
+        base >= 4.14 && < 5,
+        containers,
+        aeson,
+        bytestring,
+        text,
+        unordered-containers
+        
+    -- Language extensions used in your code
+    default-extensions:
+        DeriveGeneric,
+        OverloadedStrings,
+        DuplicateRecordFields
+
+    default-language: Haskell2010
+    ghc-options:      -Wall

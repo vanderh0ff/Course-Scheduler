@@ -33,12 +33,8 @@ jobs:
 
     - name: Build
       run: |
-        # If using a single file without a .cabal file:
-        ghc --make draft.hs -o planner
-        
-        # If you move to a Cabal project later:
-        # cabal update
-        # cabal build all
+        cabal update
+        cabal build all
 
     - name: Run Tests
       run: |
