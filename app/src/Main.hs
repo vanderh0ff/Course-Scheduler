@@ -1,7 +1,16 @@
+{-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE OverloadedStrings #-}
+
+module Main where
+
 import qualified Data.Set as Set
 import qualified Data.Map as Map
-import Data.List (subsequences, find, sortOn, intercalate)
+import qualified Data.ByteString.Lazy as B
+import Data.List (subsequences, sortOn, intercalate)
 import Control.Monad (guard)
+import GHC.Generics
+import Data.Aeson
+import System.Environment (getArgs)
 
 -- ==========================================
 -- 1. DATA TYPES
@@ -10,7 +19,7 @@ import Control.Monad (guard)
 type CourseCode = String
 
 data Season = Fall | Spring | Summer | Winter
-    deriving (Eq, Ord, Enum, Show, Read)
+    deriving (Eq, Ord, Enum, Show, Read, Generic)
 
 data Semester = Semester 
     { year   :: Int
@@ -23,14 +32,14 @@ data PrereqTree
     | And [PrereqTree]
     | Or [PrereqTree]
     | CreditCount Int
-    deriving (Show, Eq)
+    deriving (Show, Eq, Generic)
 
 data Course = Course { code         :: CourseCode
     , credits      :: Int
     , prereqs      :: PrereqTree
     , availability :: [Season]
     , requiresLab  :: Maybe CourseCode -- Co-requisite logic
-    } deriving (Show, Eq)
+    } deriving (Show, Eq, Generic)
 
 data PlannerState = PlannerState
     { remainingReqs :: [Course]
@@ -39,6 +48,20 @@ data PlannerState = PlannerState
     , schedule      :: Map.Map Semester [Course]
     , totalCredits  :: Int
     } deriving (Show)
+
+instance FromJSON Course
+instance FromJSON PrereqTree
+instance FromJSON Season
+instance ToJSON Course
+instance ToJSON PrereqTree
+instance ToJSON Season
+
+loadCatalog :: FilePath -> IO [Course]
+loadCatalog path = do
+    content <- B.readFile path
+    case decode content of
+        Just courses -> return courses
+        Nothing      -> error "Failed to parse course catalog. Check JSON format."
 
 -- ==========================================
 -- 2. EVALUATOR LOGIC
@@ -102,24 +125,6 @@ solve state bounds
                 }
         solve nextState bounds
 
--- ==========================================
--- 4. TEST DATA & EXECUTION
--- ==========================================
-
--- Define some courses
-cs101 = Course "CS101" 4 None [Fall, Spring] Nothing
-cs102 = Course "CS102" 4 (CourseCode "CS101") [Spring] (Just "CS102L")
-cs102l = Course "CS102L" 1 None [Spring] Nothing -- Lab
-math101 = Course "Math101" 3 None [Fall] Nothing
-
-initialState = PlannerState
-    { remainingReqs = [cs101, cs102, cs102l, math101]
-    , completed     = Set.empty
-    , currentSem    = Semester 2026 Fall
-    , schedule      = Map.empty
-    , totalCredits  = 0
-    }
-
 -- | Converts the resulting Map into a formatted string
 formatSchedule :: Map.Map Semester [Course] -> String
 formatSchedule sched = 
@@ -135,17 +140,30 @@ formatSchedule sched =
         formatCourse c = "  - " ++ code c ++ " (" ++ show (credits c) ++ " units)"
     in intercalate ("\n" ++ divider ++ "\n") (map formatRow sortedSemesters)
 
--- Example run: Find first valid schedule with 3-10 credits per sem
--- (Lowered credit bounds for this small test case)
 main :: IO ()
 main = do
-    putStrLn "Generating Course Plan...\n"
-    let results = solve initialState (3, 10)
-    case results of
-        []    -> putStrLn "Error: No valid schedule could be generated with the given constraints."
-        (s:_) -> do
-            putStrLn "Suggested Academic Plan:"
-            putStrLn "=================================================="
-            putStrLn $ formatSchedule s
-            putStrLn "=================================================="
-            putStrLn $ "Total Semesters: " ++ show (Map.size s)
+    args <- getArgs
+    case args of
+      [filePath] -> do
+        putStrLn "Loading Catalog...\n"
+        catalog <- loadCatalog filePath
+
+        let initialState = PlannerState 
+               { remainingReqs = catalog
+               , completed     = Set.empty
+               , currentSem    = Semester 2026 Fall
+               , schedule      = Map.empty
+               , totalCredits  = 0
+               }
+        putStrLn "Generating Course Plan...\n"
+        let results = solve initialState (3, 12)
+        case results of
+            []    -> putStrLn "Error: No valid schedule could be generated with the given constraints."
+            (s:_) -> do
+                putStrLn "Suggested Academic Plan:"
+                putStrLn "=================================================="
+                putStrLn $ formatSchedule s
+                putStrLn "=================================================="
+                putStrLn $ "Total Semesters: " ++ show (Map.size s)
+      [] -> putStrLn "Error"
+      _ -> putStrLn "Error"
