@@ -1,6 +1,8 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
 
+module Main where
+
 import qualified Data.Set as Set
 import qualified Data.Map as Map
 import qualified Data.ByteString.Lazy as B
@@ -8,6 +10,7 @@ import Data.List (subsequences, sortOn, intercalate)
 import Control.Monad (guard)
 import GHC.Generics
 import Data.Aeson
+import System.Environment (getArgs)
 
 -- ==========================================
 -- 1. DATA TYPES
@@ -139,24 +142,28 @@ formatSchedule sched =
 
 main :: IO ()
 main = do
-    putStrLn "Loading Catalog...\n"
-    catalog <- loadCatalog "catalog.json"
+    args <- getArgs
+    case args of
+      [filePath] -> do
+        putStrLn "Loading Catalog...\n"
+        catalog <- loadCatalog filePath
 
-    initalState :: PlannerState
-    let initialState = PlannerState
-        { remainingReqs = catalog
-        , completed     = Set.empty
-        , currentSem    = Semester 2026 Fall
-        , schedule      = Map.empty
-        , totalCredits  = 0
-        }
-    putStrLn "Generating Course Plan...\n"
-    let results = solve initialState (3, 10)
-    case results of
-        []    -> putStrLn "Error: No valid schedule could be generated with the given constraints."
-        (s:_) -> do
-            putStrLn "Suggested Academic Plan:"
-            putStrLn "=================================================="
-            putStrLn $ formatSchedule s
-            putStrLn "=================================================="
-            putStrLn $ "Total Semesters: " ++ show (Map.size s)
+        let initialState = PlannerState 
+               { remainingReqs = catalog
+               , completed     = Set.empty
+               , currentSem    = Semester 2026 Fall
+               , schedule      = Map.empty
+               , totalCredits  = 0
+               }
+        putStrLn "Generating Course Plan...\n"
+        let results = solve initialState (3, 12)
+        case results of
+            []    -> putStrLn "Error: No valid schedule could be generated with the given constraints."
+            (s:_) -> do
+                putStrLn "Suggested Academic Plan:"
+                putStrLn "=================================================="
+                putStrLn $ formatSchedule s
+                putStrLn "=================================================="
+                putStrLn $ "Total Semesters: " ++ show (Map.size s)
+      [] -> putStrLn "Error"
+      _ -> putStrLn "Error"
