@@ -1,33 +1,521 @@
 [
-  {
-    "code": "CS101",
-    "credits": 4,
-    "prereqs": { "tag": "None" },
-    "availability": ["Fall", "Spring"],
-    "requiresLab": null
-  },
-  {
-    "code": "CS102",
-    "credits": 4,
-    "prereqs": {
-      "tag": "CourseCode",
-      "contents": "CS101"
+    {
+        "code": "MATH134",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [
+            "Fall",
+            "Winter",
+            "Summer"
+        ],
+        "requiresLab": null
     },
-    "availability": ["Spring"],
-    "requiresLab": "CS102L"
-  },
-  {
-    "code": "CS102L",
-    "credits": 1,
-    "prereqs": { "tag": "None" },
-    "availability": ["Spring"],
-    "requiresLab": null
-  },
-  {
-    "code": "MATH101",
-    "credits": 3,
-    "prereqs": { "tag": "None" },
-    "availability": ["Fall"],
-    "requiresLab": null
-  }
+    {
+        "code": "MATH135",
+        "credits": 3,
+        "prereqs": {
+            "tag": "Or",
+            "contents": [
+                {
+                    "tag": "CourseCode",
+                    "contents": "MATH134"
+                },
+                {
+                    "tag": "CourseCode",
+                    "contents": "MATH144"
+                }
+            ]
+        },
+        "availability": [
+            "Winter"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "MATH144",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [
+            "Fall",
+            "Winter",
+            "Spring"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "MATH146",
+        "credits": 3,
+        "prereqs": {
+            "tag": "Or",
+            "contents": [
+                {
+                    "tag": "CourseCode",
+                    "contents": "MATH134"
+                },
+                {
+                    "tag": "CourseCode",
+                    "contents": "MATH144"
+                }
+            ]
+        },
+        "availability": [
+            "Fall",
+            "Winter",
+            "Spring"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "PHYS124",
+        "credits": 3,
+        "prereqs": {
+            "tag": "Or",
+            "contents": [
+                {
+                    "tag": "CourseCode",
+                    "contents": "MATH134"
+                },
+                {
+                    "tag": "CourseCode",
+                    "contents": "MATH144"
+                }
+            ]
+        },
+        "availability": [
+            "Fall",
+            "Winter",
+            "Spring"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "PHYS144",
+        "credits": 3,
+        "prereqs": {
+            "tag": "Or",
+            "contents": [
+                {
+                    "tag": "CourseCode",
+                    "contents": "MATH134"
+                },
+                {
+                    "tag": "CourseCode",
+                    "contents": "MATH144"
+                }
+            ]
+        },
+        "availability": [
+            "Fall"
+        ],
+        "requiresLab": "MATH134"
+    },
+    {
+        "code": "BIOL298",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [
+            "Fall",
+            "Winter"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "BIOL322",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [
+            "Fall"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "BIOL330",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [],
+        "requiresLab": null
+    },
+    {
+        "code": "BIOL332",
+        "credits": 3,
+        "prereqs": {
+            "tag": "Or",
+            "contents": [
+                {
+                    "tag": "CourseCode",
+                    "contents": "MATH134"
+                },
+                {
+                    "tag": "CourseCode",
+                    "contents": "MATH144"
+                }
+            ]
+        },
+        "availability": [
+            "Fall"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "BIOL395",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [
+            "Spring",
+            "Summer"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "BIOL471",
+        "credits": 3,
+        "prereqs": {
+            "tag": "And",
+            "contents": [
+                {
+                    "tag": "Or",
+                    "contents": [
+                        {
+                            "tag": "CourseCode",
+                            "contents": "MATH135"
+                        },
+                        {
+                            "tag": "CourseCode",
+                            "contents": "MATH146"
+                        }
+                    ]
+                },
+                {
+                    "tag": "Or",
+                    "contents": [
+                        {
+                            "tag": "CourseCode",
+                            "contents": "BIOL431"
+                        },
+                        {
+                            "tag": "CourseCode",
+                            "contents": "BIOL332"
+                        },
+                        {
+                            "tag": "CourseCode",
+                            "contents": "BOT332"
+                        }
+                    ]
+                }
+            ]
+        },
+        "availability": [
+            "Winter"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "BOT308",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [
+            "Winter"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "BOT340",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [
+            "Fall"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "BOT411",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [
+            "Winter"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "EAS221",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [
+            "Fall"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "EAS224",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [
+            "Fall"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "EAS232",
+        "credits": 3,
+        "prereqs": {
+            "tag": "CourseCode",
+            "contents": "EAS224"
+        },
+        "availability": [
+            "Winter"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "EAS234",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [
+            "Winter"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "EAS331",
+        "credits": 3,
+        "prereqs": {
+            "tag": "CourseCode",
+            "contents": "EAS232"
+        },
+        "availability": [
+            "Fall"
+        ],
+        "requiresLab": "EAS320"
+    },
+    {
+        "code": "EAS332",
+        "credits": 3,
+        "prereqs": {
+            "tag": "And",
+            "contents": [
+                {
+                    "tag": "CourseCode",
+                    "contents": "EAS320"
+                },
+                {
+                    "tag": "CourseCode",
+                    "contents": "EAS331"
+                }
+            ]
+        },
+        "availability": [
+            "Winter"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "EAS336",
+        "credits": 3,
+        "prereqs": {
+            "tag": "CourseCode",
+            "contents": "EAS232"
+        },
+        "availability": [
+            "Fall"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "EAS320",
+        "credits": 3,
+        "prereqs": {
+            "tag": "CourseCode",
+            "contents": "EAS224"
+        },
+        "availability": [
+            "Fall"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "EAS333",
+        "credits": 3,
+        "prereqs": {
+            "tag": "And",
+            "contents": [
+                {
+                    "tag": "CourseCode",
+                    "contents": "EAS233"
+                },
+                {
+                    "tag": "CourseCode",
+                    "contents": "EAS331"
+                },
+                {
+                    "tag": "CourseCode",
+                    "contents": "EAS332"
+                }
+            ]
+        },
+        "availability": [
+            "Winter"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "EAS324",
+        "credits": 3,
+        "prereqs": {
+            "tag": "CourseCode",
+            "contents": "EAS221"
+        },
+        "availability": [
+            "Winter"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "EAS327",
+        "credits": 3,
+        "prereqs": {
+            "tag": "CourseCode",
+            "contents": "CALC1"
+        },
+        "availability": [
+            "Winter"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "EAS354",
+        "credits": 3,
+        "prereqs": {
+            "tag": "Or",
+            "contents": [
+                {
+                    "tag": "CourseCode",
+                    "contents": "EAS320"
+                },
+                {
+                    "tag": "CourseCode",
+                    "contents": "EAS324"
+                }
+            ]
+        },
+        "availability": [
+            "Winter"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "EAS451",
+        "credits": 3,
+        "prereqs": {
+            "tag": "CourseCode",
+            "contents": "EAS221"
+        },
+        "availability": [
+            "Fall"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "EAS426",
+        "credits": 3,
+        "prereqs": {
+            "tag": "CourseCode",
+            "contents": "EAS3XX"
+        },
+        "availability": [
+            "Fall",
+            "Winter",
+            "Spring",
+            "Summer"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "EAS427",
+        "credits": 3,
+        "prereqs": {
+            "tag": "CreditCount",
+            "contents": 90
+        },
+        "availability": [
+            "Fall",
+            "Winter",
+            "Spring",
+            "Summer"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "REN_R364",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [
+            "Winter"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "CMPUT101",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [
+            "Fall",
+            "Winter",
+            "Spring",
+            "Summer"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "XXX101",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [
+            "Fall",
+            "Winter",
+            "Spring",
+            "Summer"
+        ],
+        "requiresLab": null
+    },
+    {
+        "code": "BOT321",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [
+            "Winter"
+        ],
+        "requiresLab": null
+    }
 ]
