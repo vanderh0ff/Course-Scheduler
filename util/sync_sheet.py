@@ -96,7 +96,7 @@ def transform():
 
         processed.append(item)
 
-    with open('courses.json', 'w') as f:
+    with open('catalog.json', 'w') as f:
         json.dump(processed, f, indent=4)
 
 if __name__ == "__main__":
