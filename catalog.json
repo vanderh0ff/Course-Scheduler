@@ -506,16 +506,5 @@
             "Summer"
         ],
         "requiresLab": null
-    },
-    {
-        "code": "BOT321",
-        "credits": 3,
-        "prereqs": {
-            "tag": "None"
-        },
-        "availability": [
-            "Winter"
-        ],
-        "requiresLab": null
     }
 ]
