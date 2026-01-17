@@ -207,8 +207,8 @@ nextSemester (Semester y Spring) = Semester y Summer
 nextSemester (Semester y Summer) = Semester (y + 1) Fall
 
 -- | Beam search solver with configurable beam width
-beamSearch :: Int -> PlannerState -> (Int, Int) -> [PlannerState]
-beamSearch beamWidth initialState bounds = go [initialState] (0 :: Int)
+beamSearch :: Config -> Int -> PlannerState -> [PlannerState]
+beamSearch config beamWidth initialState = go [initialState] (0 :: Int)
   where
     maxDepth = 50  -- Increased safety limit
     
@@ -218,7 +218,7 @@ beamSearch beamWidth initialState bounds = go [initialState] (0 :: Int)
         | null beam = []
         | otherwise =
             let -- Generate successors for each state in beam
-                successors = concatMap (expandState bounds) beam
+                successors = concatMap (expandState config) beam
                 -- Score and sort all successors
                 scored = sortBy (comparing scoreState) successors
                 -- Keep only top beamWidth states
@@ -238,14 +238,20 @@ beamSearch beamWidth initialState bounds = go [initialState] (0 :: Int)
                else completedStates ++ go ongoing (depth + 1)
 
 -- | Expand a single state into all possible next states
-expandState :: (Int, Int) -> PlannerState -> [PlannerState]
-expandState bounds state
+expandState :: Config -> PlannerState -> [PlannerState]
+expandState config state
     | Set.null (remainingReqs state) = [state]
     | otherwise =
-        let -- First check basic eligibility (prereqs + availability)
+        let -- Get season limits
+            currentS = season (currentSem state)
+            minC = Map.findWithDefault 0 currentS (minCreditsPerSeason config)
+            maxC = Map.findWithDefault 3 currentS (maxCreditsPerSeason config)
+            bounds = (minC, maxC)
+
+            -- First check basic eligibility (prereqs + availability)
             basicEligible = Set.filter isBasicAvailable (remainingReqs state)
             isBasicAvailable c = isEligible state (prereqs c) &&
-                               season (currentSem state) `elem` availability c
+                               currentS `elem` availability c
             
             -- Then filter for lab requirements
             eligible = Set.filter (hasLabAvailable basicEligible) basicEligible
@@ -329,8 +335,8 @@ data Config = Config
     , beamWidth   :: Int
     , startYear   :: Int
     , startSeason :: Season
-    , minCredits  :: Int
-    , maxCredits  :: Int
+    , minCreditsPerSeason :: Map.Map Season Int
+    , maxCreditsPerSeason :: Map.Map Season Int
     } deriving (Show)
 
 defaultConfig :: FilePath -> Config
@@ -339,8 +345,14 @@ defaultConfig path = Config
     , beamWidth   = 5
     , startYear   = 2026
     , startSeason = Fall
-    , minCredits  = 3
-    , maxCredits  = 12
+    , minCreditsPerSeason = Map.fromList 
+        [ (Fall, 3), (Winter, 3)
+        , (Spring, 0), (Summer, 0)
+        ]
+    , maxCreditsPerSeason = Map.fromList 
+        [ (Fall, 12), (Winter, 12)
+        , (Spring, 3), (Summer, 3) 
+        ]
     }
 
 parseArgs :: [String] -> Either String Config
@@ -360,19 +372,53 @@ parseArgs (path:rest) = parseOptions (defaultConfig path) rest
         case readSeason s of
             Just season -> parseOptions (cfg { startSeason = season }) xs
             Nothing -> Left $ "Invalid season: " ++ s ++ ". Use: Fall, Winter, Spring, or Summer"
+    -- Global Limits
     parseOptions cfg ("--min-credits":m:xs) = 
         case reads m of
-            [(n, "")] | n >= 0 -> parseOptions (cfg { minCredits = n }) xs
+            [(n, "")] | n >= 0 -> 
+                let newMap = Map.map (const n) (minCreditsPerSeason cfg)
+                in parseOptions (cfg { minCreditsPerSeason = newMap }) xs
             _ -> Left $ "Invalid min-credits: " ++ m ++ " (must be >= 0)"
     parseOptions cfg ("--max-credits":m:xs) = 
         case reads m of
-            [(n, "")] | n > 0 -> parseOptions (cfg { maxCredits = n }) xs
+            [(n, "")] | n > 0 -> 
+                let newMap = Map.map (const n) (maxCreditsPerSeason cfg)
+                in parseOptions (cfg { maxCreditsPerSeason = newMap }) xs
             _ -> Left $ "Invalid max-credits: " ++ m ++ " (must be > 0)"
+    
+    -- Per-Season Limits (Spring)
+    parseOptions cfg ("--min-credits-spring":m:xs) = updateSeasonMin cfg Spring m xs
+    parseOptions cfg ("--max-credits-spring":m:xs) = updateSeasonMax cfg Spring m xs
+    
+    -- Per-Season Limits (Summer)
+    parseOptions cfg ("--min-credits-summer":m:xs) = updateSeasonMin cfg Summer m xs
+    parseOptions cfg ("--max-credits-summer":m:xs) = updateSeasonMax cfg Summer m xs
+    
+    -- Per-Season Limits (Fall)
+    parseOptions cfg ("--min-credits-fall":m:xs) = updateSeasonMin cfg Fall m xs
+    parseOptions cfg ("--max-credits-fall":m:xs) = updateSeasonMax cfg Fall m xs
+    
+    -- Per-Season Limits (Winter)
+    parseOptions cfg ("--min-credits-winter":m:xs) = updateSeasonMin cfg Winter m xs
+    parseOptions cfg ("--max-credits-winter":m:xs) = updateSeasonMax cfg Winter m xs
+
     parseOptions cfg ("--help":_) = Left helpText
     parseOptions cfg ("-h":_) = Left helpText
     parseOptions cfg (flag:_) | "--" `isPrefixOf` flag = 
         Left $ "Unknown option: " ++ flag ++ "\nUse --help for usage information"
     parseOptions _ (arg:_) = Left $ "Unexpected argument: " ++ arg
+
+    updateSeasonMin cfg s m xs = case reads m of
+        [(n, "")] | n >= 0 -> 
+            let newMap = Map.insert s n (minCreditsPerSeason cfg)
+            in parseOptions (cfg { minCreditsPerSeason = newMap }) xs
+        _ -> Left $ "Invalid min-credits-" ++ show s ++ ": " ++ m
+
+    updateSeasonMax cfg s m xs = case reads m of
+        [(n, "")] | n > 0 -> 
+            let newMap = Map.insert s n (maxCreditsPerSeason cfg)
+            in parseOptions (cfg { maxCreditsPerSeason = newMap }) xs
+        _ -> Left $ "Invalid max-credits-" ++ show s ++ ": " ++ m
     
     isPrefixOf [] _ = True
     isPrefixOf _ [] = False
@@ -402,14 +448,14 @@ parseArgs (path:rest) = parseOptions (defaultConfig path) rest
         , "  --year <year>               Starting year (default: 2026)"
         , "  --season <season>           Starting season: Fall, Winter, Spring, Summer"
         , "                              (default: Fall)"
-        , "  --min-credits <credits>     Minimum credits per semester (default: 3)"
-        , "  --max-credits <credits>     Maximum credits per semester (default: 12)"
+        , "  --min-credits <n>           Set min credits for ALL seasons"
+        , "  --max-credits <n>           Set max credits for ALL seasons"
+        , "  --min-credits-spring <n>    Set min credits for Spring"
+        , "  --max-credits-spring <n>    Set max credits for Spring (default: 3)"
+        , "  --min-credits-summer <n>    Set min credits for Summer"
+        , "  --max-credits-summer <n>    Set max credits for Summer (default: 3)"
+        , "  ... (similar for Fall/Winter)"
         , "  -h, --help                  Show this help message"
-        , ""
-        , "Examples:"
-        , "  planner catalog.json"
-        , "  planner catalog.json --beam 10 --year 2025"
-        , "  planner catalog.json --season Spring --min-credits 6 --max-credits 15"
         ]
 
 -- ==========================================
@@ -449,21 +495,19 @@ runPlanner config = do
     putStrLn $ "Configuration:"
     putStrLn $ "  Start: " ++ show (startSeason config) ++ " " ++ show (startYear config)
     putStrLn $ "  Beam width: " ++ show (beamWidth config)
-    putStrLn $ "  Credits per semester: " ++ show (minCredits config) ++ "-" ++ show (maxCredits config)
+    putStrLn $ "  Spring Max Credits: " ++ show (Map.findWithDefault 3 Spring (maxCreditsPerSeason config))
+    putStrLn $ "  Summer Max Credits: " ++ show (Map.findWithDefault 3 Summer (maxCreditsPerSeason config))
     putStrLn $ "  Total courses: " ++ show (Set.size catalog) ++ "\n"
     
-    let bounds = (minCredits config, maxCredits config)
-        results = beamSearch (beamWidth config) initialState bounds
+    let results = beamSearch config (beamWidth config) initialState
     
     case results of
         [] -> do
-            putStrLn $ "No solutions found with (" ++ show (minCredits config) ++ "," ++ 
-                       show (maxCredits config) ++ ") credit range."
-            putStrLn "Trying with relaxed constraints (0,18)...\n"
-            let relaxedBounds = (0, max 18 (maxCredits config))
-            let relaxedResults = beamSearch (beamWidth config * 2) initialState relaxedBounds
+            putStrLn "No solutions found with current constraints."
+            putStrLn "Trying with higher beam width (10)...\n"
+            let relaxedResults = beamSearch config 10 initialState
             case relaxedResults of
-                [] -> putStrLn "Error: No valid schedule could be generated even with relaxed constraints."
+                [] -> putStrLn "Error: No valid schedule could be generated."
                 solutions -> displaySolutions solutions
         solutions -> displaySolutions solutions
   where
