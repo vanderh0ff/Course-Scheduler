@@ -514,5 +514,48 @@
             "Winter"
         ],
         "requiresLab": null
+    },
+    {
+        "tag": "OneOf",
+        "contents": [
+            {
+                "tag": "AllOf",
+                "contents": [
+                    {
+                        "code": "STAT_APP_1",
+                        "credits": 3,
+                        "prereqs": { "tag": "None" },
+                        "availability": ["Fall"],
+                        "requiresLab": null
+                    },
+                    {
+                        "code": "STAT_APP_2",
+                        "credits": 3,
+                        "prereqs": { "tag": "CourseCode", "contents": "STAT_APP_1" },
+                        "availability": ["Winter"],
+                        "requiresLab": null
+                    }
+                ]
+            },
+            {
+                "tag": "AllOf",
+                "contents": [
+                    {
+                        "code": "STAT_CALC_1",
+                        "credits": 3,
+                        "prereqs": { "tag": "None" },
+                        "availability": ["Fall"],
+                        "requiresLab": null
+                    },
+                    {
+                        "code": "STAT_CALC_2",
+                        "credits": 3,
+                        "prereqs": { "tag": "CourseCode", "contents": "STAT_CALC_1" },
+                        "availability": ["Winter"],
+                        "requiresLab": null
+                    }
+                ]
+            }
+        ]
     }
 ]
