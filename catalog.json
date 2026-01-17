@@ -142,7 +142,10 @@
         "prereqs": {
             "tag": "None"
         },
-        "availability": [],
+        "availability": [
+            "Fall",
+            "Winter"
+        ],
         "requiresLab": null
     },
     {
@@ -364,10 +367,6 @@
             "contents": [
                 {
                     "tag": "CourseCode",
-                    "contents": "EAS233"
-                },
-                {
-                    "tag": "CourseCode",
                     "contents": "EAS331"
                 },
                 {
@@ -442,9 +441,8 @@
         "code": "EAS426",
         "credits": 3,
         "prereqs": {
-            "tag": "CourseCode",
-            "contents": "EAS3XX"
-        },
+	  "tag": "None"
+	},
         "availability": [
             "Fall",
             "Winter",
@@ -457,9 +455,8 @@
         "code": "EAS427",
         "credits": 3,
         "prereqs": {
-            "tag": "CreditCount",
-            "contents": 90
-        },
+	"tag": "None"
+	},
         "availability": [
             "Fall",
             "Winter",
