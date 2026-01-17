@@ -7,13 +7,9 @@ author:             Matthew Vander Hoff
 category:           Education
 build-type:         Simple
 
-executable planner
-    main-is:          Main.hs
-    
-    -- This tells Cabal where to look for your source files
+library
+    exposed-modules:  Scheduler
     hs-source-dirs:   app/src
-    
-    -- Dependencies required for the project
     build-depends:    
         base >= 4.14 && < 5,
         containers,
@@ -21,12 +17,34 @@ executable planner
         bytestring,
         text,
         unordered-containers
-        
-    -- Language extensions used in your code
     default-extensions:
         DeriveGeneric,
         OverloadedStrings,
         DuplicateRecordFields
+    default-language: Haskell2010
+    ghc-options:      -Wall
 
+executable planner
+    main-is:          Main.hs
+    hs-source-dirs:   app/src
+    build-depends:    
+        base >= 4.14 && < 5,
+        course-planner
+    default-extensions:
+        DeriveGeneric,
+        OverloadedStrings,
+        DuplicateRecordFields
+    default-language: Haskell2010
+    ghc-options:      -Wall
+
+test-suite spec
+    type:             exitcode-stdio-1.0
+    main-is:          Spec.hs
+    hs-source-dirs:   test
+    build-depends:    
+        base >= 4.14 && < 5,
+        course-planner,
+        hspec,
+        containers
     default-language: Haskell2010
     ghc-options:      -Wall
