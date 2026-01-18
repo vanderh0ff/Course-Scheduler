@@ -142,10 +142,7 @@
         "prereqs": {
             "tag": "None"
         },
-        "availability": [
-            "Fall",
-            "Winter"
-        ],
+        "availability": [],
         "requiresLab": null
     },
     {
@@ -221,28 +218,6 @@
         },
         "availability": [
             "Winter"
-        ],
-        "requiresLab": null
-    },
-    {
-        "code": "BOT308",
-        "credits": 3,
-        "prereqs": {
-            "tag": "None"
-        },
-        "availability": [
-            "Winter"
-        ],
-        "requiresLab": null
-    },
-    {
-        "code": "BOT340",
-        "credits": 3,
-        "prereqs": {
-            "tag": "None"
-        },
-        "availability": [
-            "Fall"
         ],
         "requiresLab": null
     },
@@ -396,8 +371,17 @@
         "code": "EAS327",
         "credits": 3,
         "prereqs": {
-            "tag": "CourseCode",
-            "contents": "CALC1"
+            "tag": "Or",
+            "contents": [
+                {
+                    "tag": "CourseCode",
+                    "contents": "MATH134"
+                },
+                {
+                    "tag": "CourseCode",
+                    "contents": "MATH144"
+                }
+            ]
         },
         "availability": [
             "Winter"
@@ -441,8 +425,9 @@
         "code": "EAS426",
         "credits": 3,
         "prereqs": {
-	  "tag": "None"
-	},
+            "tag": "CourseCode",
+            "contents": "EAS3XX"
+        },
         "availability": [
             "Fall",
             "Winter",
@@ -455,8 +440,9 @@
         "code": "EAS427",
         "credits": 3,
         "prereqs": {
-	"tag": "None"
-	},
+            "tag": "CreditCount",
+            "contents": 90
+        },
         "availability": [
             "Fall",
             "Winter",
@@ -505,57 +491,13 @@
         "requiresLab": null
     },
     {
-        "code": "BOT321",
+        "code": "PCDBLIST",
         "credits": 3,
         "prereqs": {
-            "tag": "None"
+            "tag": "CourseCode",
+            "contents": "ENGLISHLIST"
         },
-        "availability": [
-            "Winter"
-        ],
+        "availability": [],
         "requiresLab": null
-    },
-    {
-        "tag": "OneOf",
-        "contents": [
-            {
-                "tag": "AllOf",
-                "contents": [
-                    {
-                        "code": "STAT_APP_1",
-                        "credits": 3,
-                        "prereqs": { "tag": "None" },
-                        "availability": ["Fall"],
-                        "requiresLab": null
-                    },
-                    {
-                        "code": "STAT_APP_2",
-                        "credits": 3,
-                        "prereqs": { "tag": "CourseCode", "contents": "STAT_APP_1" },
-                        "availability": ["Winter"],
-                        "requiresLab": null
-                    }
-                ]
-            },
-            {
-                "tag": "AllOf",
-                "contents": [
-                    {
-                        "code": "STAT_CALC_1",
-                        "credits": 3,
-                        "prereqs": { "tag": "None" },
-                        "availability": ["Fall"],
-                        "requiresLab": null
-                    },
-                    {
-                        "code": "STAT_CALC_2",
-                        "credits": 3,
-                        "prereqs": { "tag": "CourseCode", "contents": "STAT_CALC_1" },
-                        "availability": ["Winter"],
-                        "requiresLab": null
-                    }
-                ]
-            }
-        ]
     }
 ]
