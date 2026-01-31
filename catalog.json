@@ -96,17 +96,7 @@
         "code": "PHYS144",
         "credits": 3,
         "prereqs": {
-            "tag": "Or",
-            "contents": [
-                {
-                    "tag": "CourseCode",
-                    "contents": "MATH134"
-                },
-                {
-                    "tag": "CourseCode",
-                    "contents": "MATH144"
-                }
-            ]
+            "tag": "None"
         },
         "availability": [
             "Fall"
@@ -222,6 +212,17 @@
         "requiresLab": null
     },
     {
+        "code": "BOT322",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [
+            "Summer"
+        ],
+        "requiresLab": null
+    },
+    {
         "code": "BOT411",
         "credits": 3,
         "prereqs": {
@@ -260,17 +261,6 @@
         "prereqs": {
             "tag": "CourseCode",
             "contents": "EAS224"
-        },
-        "availability": [
-            "Winter"
-        ],
-        "requiresLab": null
-    },
-    {
-        "code": "EAS234",
-        "credits": 3,
-        "prereqs": {
-            "tag": "None"
         },
         "availability": [
             "Winter"
@@ -452,6 +442,17 @@
         "requiresLab": null
     },
     {
+        "code": "EAS457",
+        "credits": 3,
+        "prereqs": {
+            "tag": "None"
+        },
+        "availability": [
+            "Winter"
+        ],
+        "requiresLab": null
+    },
+    {
         "code": "REN_R364",
         "credits": 3,
         "prereqs": {
@@ -463,35 +464,7 @@
         "requiresLab": null
     },
     {
-        "code": "CMPUT101",
-        "credits": 3,
-        "prereqs": {
-            "tag": "None"
-        },
-        "availability": [
-            "Fall",
-            "Winter",
-            "Spring",
-            "Summer"
-        ],
-        "requiresLab": null
-    },
-    {
-        "code": "XXX101",
-        "credits": 3,
-        "prereqs": {
-            "tag": "None"
-        },
-        "availability": [
-            "Fall",
-            "Winter",
-            "Spring",
-            "Summer"
-        ],
-        "requiresLab": null
-    },
-    {
-        "code": "PCDBLIST",
+        "code": "ONEEACHLIST:",
         "credits": 3,
         "prereqs": {
             "tag": "CourseCode",
